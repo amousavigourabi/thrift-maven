@@ -93,6 +93,8 @@ public class ThriftMojo extends AbstractMojo {
     }
     arguments.add("--gen");
     arguments.add(language);
+    arguments.add("-out");
+    arguments.add(targetDirectory.getAbsolutePath());
     try {
       File thriftExecutable = ThriftExtractor.extract(version);
       ThriftCompiler.run(thriftExecutable, arguments.toArray(String[]::new));
