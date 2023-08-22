@@ -1,10 +1,6 @@
 package me.atour.thift.maven;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import me.atour.thriftjar.ThriftCompiler;
 import me.atour.thriftjar.ThriftExtractor;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -78,30 +74,20 @@ public class ThriftMojo extends AbstractMojo {
    */
   @Override
   public void execute() throws MojoExecutionException, MojoFailureException {
-    List<String> arguments = new ArrayList<>();
-    if (strict) {
-      arguments.add("-strict");
-    }
-    if (verbose) {
-      arguments.add("-verbose");
-    }
-    if (recurse) {
-      arguments.add("-recurse");
-    }
-    if (allowNegativeKeys) {
-      arguments.add("--allow-neg-keys");
-    }
-    arguments.add("--gen");
-    arguments.add(language);
-    arguments.add("-out");
-    arguments.add(targetDirectory.getAbsolutePath());
     try {
       File thriftExecutable = ThriftExtractor.extract(version);
-      ThriftCompiler.run(thriftExecutable, arguments.toArray(String[]::new));
-    } catch (IOException | InterruptedException e) {
-      throw new MojoExecutionException(e);
-    } catch (Exception e) {
+      Thrift thriftCompiler = Thrift.builder(thriftExecutable, targetDirectory)
+          .strict(strict)
+          .allowNegKeys(allowNegativeKeys)
+          .gen(language)
+          .recurse(recurse)
+          .verbose(verbose)
+          .build();
+      thriftCompiler.compile();
+    } catch (FailedToRunThriftCompilerException e) {
       throw new MojoFailureException(e);
+    } catch (Exception e) {
+      throw new MojoExecutionException(e);
     }
   }
 }
