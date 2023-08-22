@@ -22,52 +22,51 @@ public class ThriftMojo extends AbstractMojo {
   /**
    * The Thrift {@code allowNegKeys} flag.
    */
-  @Parameter(property = "thrift.allowNegativeKeys", defaultValue = "false", required = true)
+  @Parameter(property = "thrift.allowNegativeKeys", defaultValue = "false")
   private boolean allowNegativeKeys;
 
   /**
    * The Thrift {@code strict} flag.
    */
-  @Parameter(property = "thrift.strict", defaultValue = "false", required = true)
+  @Parameter(property = "thrift.strict", defaultValue = "false")
   private boolean strict;
 
   /**
    * The Thrift {@code verbose} flag.
    */
-  @Parameter(property = "thrift.verbose", defaultValue = "false", required = true)
+  @Parameter(property = "thrift.verbose", defaultValue = "false")
   private boolean verbose;
 
   /**
    * The Thrift {@code recurse} flag.
    */
-  @Parameter(property = "thrift.recurse", defaultValue = "true", required = true)
+  @Parameter(property = "thrift.recurse", defaultValue = "true")
   private boolean recurse;
 
   /**
    * The source directory of the files to compile.
    */
-  @Parameter(
-      property = "thrift.sourceDirectory",
-      defaultValue = "${project.basedir}/src/main/thrift",
-      required = true)
+  @Parameter(property = "thrift.sourceDirectory", defaultValue = "${project.basedir}/src/main/thrift")
   private File sourceDirectory;
 
   /**
    * The source directory of the files to compile.
    */
-  @Parameter(property = "thrift.targetDirectory", required = true)
+  @Parameter(
+      property = "thrift.targetDirectory",
+      defaultValue = "${project.build.directory}/generated-sources/thrift")
   private File targetDirectory;
 
   /**
    * Version of Thrift to use to compile the files.
    */
-  @Parameter(property = "thrift.version", required = true)
+  @Parameter(property = "thrift.version", defaultValue = "latest")
   private String version;
 
   /**
    * Thrift language.
    */
-  @Parameter(property = "thrift.language", defaultValue = "java", required = true)
+  @Parameter(property = "thrift.language", defaultValue = "java")
   private String language;
 
   /**
@@ -90,7 +89,7 @@ public class ThriftMojo extends AbstractMojo {
       arguments.add("-recurse");
     }
     if (allowNegativeKeys) {
-      arguments.add("-allowNegKeys");
+      arguments.add("--allow-neg-keys");
     }
     arguments.add("--gen");
     arguments.add(language);
